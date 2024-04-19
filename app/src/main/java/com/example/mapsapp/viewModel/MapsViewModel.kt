@@ -38,10 +38,6 @@ class MapsViewModel: ViewModel() {
     private val _markerReady = MutableLiveData(false)
     val markerReady = _markerReady
 
-    fun confirmMarkerReady(save: Boolean) {
-        _markerReady.value = save
-    }
-
     private val _userEnterError = MutableLiveData(false)
     val userEnterError = _userEnterError
 
@@ -91,17 +87,20 @@ class MapsViewModel: ViewModel() {
     private val _searchText = MutableLiveData("")
     val searchText = _searchText
 
+    private val _filteredMarkers = MutableLiveData(mutableListOf<MyMarker>())
+    val filteredMarkers = _filteredMarkers
+
     // SEARCH MARKERS BY NAME
     fun onSearchTextChange(text: String){
         _searchText.value = text
     }
 
-    fun onToogleSearch(){
-        _isSearching.value = !_isSearching.value!!
+    fun confirmMarkerReady(save: Boolean) {
+        _markerReady.value = save
     }
 
     fun filterMarkers(){
-        _listOfMarkers.value = _listOfMarkers.value!!.filter {
+        _filteredMarkers.value = _listOfMarkers.value!!.filter {
             it.title.contains(_searchText.value?: "", ignoreCase = true)
         }.toMutableList()
     }
@@ -159,7 +158,7 @@ class MapsViewModel: ViewModel() {
             override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
                 if(error != null){
                     Log.e("Firestore error", error.message.toString())
-                    return//@addSnapshotListener
+                    return //@addSnapshotListener
                 }
                 val tempList = mutableListOf<MyMarker>()
                 for(dc: DocumentChange in value?.documentChanges!!){
@@ -174,8 +173,8 @@ class MapsViewModel: ViewModel() {
                             dc.document.get("markerColor")!!.toString().toFloat(),
                             dc.document.get("markerPhoto")?.toString()
                         )
-                        println("MARKER: $newMarker")
-                        //.toObject(MyMarker::class.java)
+                        //println("MARKER: $newMarker")
+                        //.toObject(MyMarker::class.java) NO FUNCIONA
                         tempList.add(newMarker)
 
                     }
@@ -219,8 +218,13 @@ class MapsViewModel: ViewModel() {
     }
 
     fun removeImage(url: String) {
-        val storage = FirebaseStorage.getInstance().getReferenceFromUrl(url)
-        storage.delete()
+        try {
+            val storage = FirebaseStorage.getInstance().getReferenceFromUrl(url)
+            storage.delete()
+        } catch (_: IllegalArgumentException) {
+            Log.i("removeImage", "Caught an IllegalArgumentException (probably tried to remove a null image)")
+        }
+
     }
 
     fun login(username: String?, password: String?) {

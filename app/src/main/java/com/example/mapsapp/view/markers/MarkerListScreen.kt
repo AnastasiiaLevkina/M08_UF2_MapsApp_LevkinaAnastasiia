@@ -55,12 +55,16 @@ import com.example.mapsapp.models.Routes
 import com.example.mapsapp.viewModel.MapsViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun MarkerListScreen(myViewModel: MapsViewModel, navController: NavController){
     myViewModel.getSavedMarkers()
-    val myMarkers by myViewModel.listOfMarkers.observeAsState()
+    myViewModel.filterMarkers()
+    val myMarkers by myViewModel.filteredMarkers.observeAsState()
     val showBottomSheet by myViewModel.bottomSheet.observeAsState(false)
     val selectedMarker by myViewModel.selectedMarker.observeAsState(null)
     if (showBottomSheet) {
@@ -75,7 +79,7 @@ fun MarkerListScreen(myViewModel: MapsViewModel, navController: NavController){
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        MySearchBar(myViewModel, { myViewModel.filterMarkers() })
+        MySearchBar(myViewModel)
         if (!myMarkers!!.isEmpty()) {
             LazyColumn (
                 Modifier.fillMaxSize()
@@ -143,6 +147,8 @@ fun MarkerListScreen(myViewModel: MapsViewModel, navController: NavController){
                                     onClick = {
                                         myViewModel.deleteMarker(it)
                                         if (it.photo != null && it.photo != "null") myViewModel.removeImage(it.photo!!)
+                                        myViewModel.selectMarker(null)
+                                        navController.navigate(Routes.MarkerListScreen.route)
                                     }) {
                                     Icon(
                                         imageVector = Icons.Default.Delete,
@@ -164,15 +170,14 @@ fun MarkerListScreen(myViewModel: MapsViewModel, navController: NavController){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MySearchBar(myViewModel: MapsViewModel, filterMarkers: () -> Unit){
+fun MySearchBar(myViewModel: MapsViewModel){
     val searchText by myViewModel.searchText.observeAsState("")
     SearchBar(
         query = searchText,
         onQueryChange ={
             myViewModel.onSearchTextChange(it)
-            filterMarkers()
+            myViewModel.filterMarkers()
                        },
-        onSearch = { myViewModel.onToogleSearch() },
         active = true,
         onActiveChange = {},
         modifier = Modifier
@@ -186,22 +191,19 @@ fun MySearchBar(myViewModel: MapsViewModel, filterMarkers: () -> Unit){
                 Color.Black
             )
         ),
+        onSearch =  { myViewModel.filterMarkers() },
         placeholder = {
-            Text(text = "Search for a character...")
+            Text(text = "Search for a marker...")
         },
         leadingIcon = {
             Icon(imageVector = Icons.Filled.Refresh, contentDescription = "Erase query",
                 tint = Color.Black,
                 modifier = Modifier.clickable {
                     myViewModel.onSearchTextChange("")
-                    filterMarkers()
-                })
-        },
-        /*trailingIcon = {
-            Icon(imageVector = Icons.Filled.Close, contentDescription = "Close search bar",
-                tint = Color.Yellow,
-                modifier = Modifier.clickable { myViewModel.onToogleSearch() })
-        }*/
-    ){
-    }
+                    myViewModel.filterMarkers()
+                }
+            )
+        }
+    )
+    { }
 }

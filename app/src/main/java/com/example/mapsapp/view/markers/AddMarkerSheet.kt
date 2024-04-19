@@ -72,7 +72,10 @@ fun AddMarkerBottomSheet(myViewModel: MapsViewModel, navController: NavControlle
     val newMarkerPhoto by myViewModel.selectedImage.observeAsState(null)
     val imageUrl by myViewModel.imageUrl.observeAsState(null)
 
-    ModalBottomSheet(onDismissRequest = { myViewModel.hideBottomSheet() }) {
+    ModalBottomSheet(onDismissRequest = {
+        myViewModel.selectMarker(null)
+        myViewModel.hideBottomSheet()
+    }) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -110,7 +113,19 @@ fun AddMarkerBottomSheet(myViewModel: MapsViewModel, navController: NavControlle
             Text(text = fileName?: "Take a photo or select an image from gallery")
             TextField(
                 value = newMarkerTitle,
-                onValueChange = { newMarkerTitle = it },
+                onValueChange = {
+                    newMarkerTitle = it
+                    myViewModel.selectMarker(
+                        MyMarker(
+                            userId,
+                            selectedMarker.markerId,
+                            LatLng(newMarkerLat, newMarkerLong),
+                            newMarkerTitle,
+                            newMarkerSnippet,
+                            newMarkerColor,
+                            newMarkerPhoto?.toString()?: selectedMarker.photo.toString()
+                        )
+                    ) },
                 placeholder = { Text(text = "Input marker title...") },
                 modifier = Modifier
                     .padding(3.dp)
@@ -118,7 +133,19 @@ fun AddMarkerBottomSheet(myViewModel: MapsViewModel, navController: NavControlle
             )
             TextField(
                 value = newMarkerSnippet,
-                onValueChange = { newMarkerSnippet = it },
+                onValueChange = {
+                    newMarkerSnippet = it
+                    myViewModel.selectMarker(
+                        MyMarker(
+                            userId,
+                            selectedMarker.markerId,
+                            LatLng(newMarkerLat, newMarkerLong),
+                            newMarkerTitle,
+                            newMarkerSnippet,
+                            newMarkerColor,
+                            newMarkerPhoto?.toString()?: selectedMarker.photo.toString()
+                        )
+                    ) },
                 placeholder = { Text(text = "Input marker snippet...") },
                 modifier = Modifier
                     .padding(3.dp)
@@ -181,7 +208,7 @@ fun AddMarkerBottomSheet(myViewModel: MapsViewModel, navController: NavControlle
                         )
                     )
                 }
-                // Restore all valures
+                // Restore all values
                 myViewModel.selectMarker(null)
                 myViewModel.selectImage(null)
                 myViewModel.selectImageUrl(null)
@@ -189,8 +216,6 @@ fun AddMarkerBottomSheet(myViewModel: MapsViewModel, navController: NavControlle
 
                 myViewModel.hideBottomSheet()
                 navController.navigate(Routes.MarkerListScreen.route)
-                //myViewModel.setCurrentLocation(LatLng(newMarkerLat, newMarkerLong))
-                //navController.navigate(Routes.MapScreen.route)
             }
         }
     }

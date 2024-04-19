@@ -24,8 +24,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,19 +34,15 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.mapsapp.OnCreate
 import com.example.mapsapp.models.Routes
 import com.example.mapsapp.view.markers.GalleryScreen
 import com.example.mapsapp.view.markers.MarkerListScreen
 import com.example.mapsapp.view.markers.TakePhotoScreen
 import com.example.mapsapp.view.permissions.CameraScreen
 import com.example.mapsapp.view.permissions.GeolocationScreen
-import com.example.mapsapp.view.user.LoginScreen
-import com.example.mapsapp.view.user.RegisterScreen
 import com.example.mapsapp.viewModel.MapsViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
 
 @SuppressLint("MissingPermission", "UnusedBoxWithConstraintsScope")

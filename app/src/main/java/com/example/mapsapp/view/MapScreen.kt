@@ -54,7 +54,6 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapScreen(myViewModel: MapsViewModel, navController: NavController) {
-    val context = LocalContext.current
     val currentLocation: LatLng by myViewModel.selectedLocation.observeAsState(LatLng(0.0, 0.0))
     val selectedMarker by myViewModel.selectedMarker.observeAsState(null)
 
@@ -104,7 +103,7 @@ fun MapScreen(myViewModel: MapsViewModel, navController: NavController) {
                 Marker(
                     state = MarkerState(position = it.position),
                     title = it.title,
-                    snippet = "${it.snippet}",
+                    snippet = it.snippet,
                     icon = BitmapDescriptorFactory.defaultMarker(it.color),
                     onInfoWindowLongClick = { marker ->
                             myViewModel.deleteMarker(it)
@@ -132,7 +131,7 @@ fun MapScreen(myViewModel: MapsViewModel, navController: NavController) {
                     enabled = false,
                     readOnly = true,
                     label = {
-                        Text(text = "Map Type", color = Color.Black)
+                        Text(text = "Map Type", color = Color.Black, fontSize = 15.sp)
                     },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
@@ -140,12 +139,13 @@ fun MapScreen(myViewModel: MapsViewModel, navController: NavController) {
                         )
                     },
                     modifier = Modifier.clickable { expanded = true },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        //focusedContainerColor = Color.White,
+                    colors = TextFieldDefaults.colors(
                         focusedTextColor = Color.Black,
                         unfocusedTextColor = Color.Black,
                         unfocusedPlaceholderColor = Color.Black,
-                        focusedPlaceholderColor = Color.Black
+                        unfocusedContainerColor = Color.White,
+                        focusedPlaceholderColor = Color.Black,
+                        focusedContainerColor = Color.White
                     )
                 )
                 DropdownMenu(

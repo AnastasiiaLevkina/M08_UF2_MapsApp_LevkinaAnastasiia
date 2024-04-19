@@ -42,7 +42,6 @@ fun MyDrawer(myViewModel: MapsViewModel, mainNavController: NavController){
 
     val context = LocalContext.current
     val userPrefs = UserPrefs(context)
-    val storedUserData = userPrefs.getUserData.collectAsState(initial = emptyList())
 
     ModalNavigationDrawer(drawerState = state, gesturesEnabled = false, drawerContent = {
         ModalDrawerSheet {
@@ -53,7 +52,6 @@ fun MyDrawer(myViewModel: MapsViewModel, mainNavController: NavController){
             }) {
                 Icon(imageVector = Icons.Filled.Menu, contentDescription = "Menu")
             }
-            //Text("Markers", modifier = Modifier.padding(16.dp))
             Divider()
             NavigationDrawerItem(
                 label = { Text("Map") },
