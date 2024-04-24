@@ -86,7 +86,7 @@ fun LoginScreen(myViewModel: MapsViewModel, navController: NavHostController) {
                 color = Color.Red, modifier = Modifier.padding(35.dp))
             TextField(
                 value = userEmail,
-                onValueChange = { if (userEmail.length < 50) userEmail = it },
+                onValueChange = { if (userEmail.length < 75) userEmail = it },
                 placeholder = { Text(text = "Enter Email") },
                 modifier = Modifier.padding(3.dp).fillMaxWidth(0.7f),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -94,7 +94,7 @@ fun LoginScreen(myViewModel: MapsViewModel, navController: NavHostController) {
             TextFieldWithVisibility(
                 password,
                 placeholder = "Enter password",
-                enterInput = { if (password.length < 15) password = it }
+                enterInput = { if (password.length < 20) password = it }
             )
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),

@@ -6,6 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mapsapp.models.Routes
+import com.example.mapsapp.view.Launch
+import com.example.mapsapp.view.LaunchScreen
 import com.example.mapsapp.view.MyDrawer
 import com.example.mapsapp.view.user.LoginScreen
 import com.example.mapsapp.view.user.RegisterScreen
@@ -16,8 +18,15 @@ fun OnCreate(myViewModel: MapsViewModel) {
     val mainNavController = rememberNavController()
     NavHost(
         navController = mainNavController as NavHostController,
-        startDestination = Routes.LoginScreen.route
+        startDestination = Routes.LaunchScreen.route
     ) {
+        composable(
+            Routes.LaunchScreen.route
+        ) {
+            LaunchScreen(
+                mainNavController
+            )
+        }
         composable(
             Routes.LoginScreen.route
         ) {

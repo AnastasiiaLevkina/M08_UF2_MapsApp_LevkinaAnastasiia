@@ -13,13 +13,9 @@ import com.google.firebase.ktx.Firebase
 
 class Repository {
     private val db = FirebaseFirestore.getInstance()
-    private lateinit var auth: FirebaseAuth
 
     private val markersCollection = "myMarkers"
 
-    fun onCreate() {
-        auth = Firebase.auth
-    }
 
     fun saveMarker(newMarker: MyMarker) {
         db.collection(markersCollection)

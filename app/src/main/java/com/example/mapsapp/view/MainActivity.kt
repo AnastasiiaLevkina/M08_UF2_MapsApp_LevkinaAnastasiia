@@ -14,7 +14,6 @@ import com.example.mapsapp.viewModel.MapsViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        //window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         super.onCreate(savedInstanceState)
         val myViewModel by viewModels<MapsViewModel> ()
         setContent {

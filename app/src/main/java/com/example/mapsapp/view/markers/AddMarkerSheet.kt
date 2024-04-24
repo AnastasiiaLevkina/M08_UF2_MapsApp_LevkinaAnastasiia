@@ -202,6 +202,7 @@ fun AddMarkerBottomSheet(myViewModel: MapsViewModel, navController: NavControlle
                     )
                 }
                 // Restore all values
+                myViewModel.changeCurrentLocation(selectedMarker.position)
                 myViewModel.selectMarker(null)
                 myViewModel.selectImage(null)
                 myViewModel.selectImageUrl(null)
@@ -209,7 +210,7 @@ fun AddMarkerBottomSheet(myViewModel: MapsViewModel, navController: NavControlle
 
                 myViewModel.hideBottomSheet()
                 myViewModel.getSavedMarkers()
-                navController.navigate(Routes.MarkerListScreen.route)
+                navController.navigate(Routes.MapScreen.route)
             }
         }
     }

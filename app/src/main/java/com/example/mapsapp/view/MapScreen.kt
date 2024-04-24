@@ -51,7 +51,6 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapScreen(myViewModel: MapsViewModel, navController: NavController) {
     val currentLocation: LatLng by myViewModel.selectedLocation.observeAsState(LatLng(0.0, 0.0))
@@ -111,23 +110,4 @@ fun MapScreen(myViewModel: MapsViewModel, navController: NavController) {
             selectedMarker!!
         )
     }
-}
-
-fun bitmapDescriptorFromVector(
-    context: Context,
-    vectorResId: Int,
-    width: Int,
-    height: Int,
-): BitmapDescriptor? {
-    val drawable = ContextCompat.getDrawable(context, vectorResId)?: return null
-    drawable.setBounds(0, 0, width, height)
-    val bm = Bitmap.createBitmap(
-        width,
-        height,
-        Bitmap.Config.ARGB_8888
-    )
-    val canvas = Canvas(bm)
-    drawable.draw(canvas)
-
-    return BitmapDescriptorFactory.fromBitmap(bm)
 }

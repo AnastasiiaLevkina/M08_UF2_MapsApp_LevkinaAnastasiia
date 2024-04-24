@@ -30,7 +30,7 @@ fun LaunchScreen(navController: NavController) {
     var startAnimation by remember { mutableStateOf(false) }
     val alphaAnim = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
-        animationSpec = tween(durationMillis = 1500),
+        animationSpec = tween(durationMillis = 2000),
         label = ""
     )
     LaunchedEffect(key1 = true) {
@@ -61,7 +61,7 @@ fun Launch(alphaAnim: Float){
             Text(
                 text = "Maps App",
                 fontSize = 24.sp,
-                color = Color.White,
+                color = Color.Black,
                 fontWeight = FontWeight.SemiBold
             )
         }
