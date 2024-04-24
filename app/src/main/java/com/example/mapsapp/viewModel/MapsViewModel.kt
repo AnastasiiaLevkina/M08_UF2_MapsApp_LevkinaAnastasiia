@@ -23,9 +23,6 @@ class MapsViewModel: ViewModel() {
     private val _selectedMarker = MutableLiveData<MyMarker?>(null)
     val selectedMarker = _selectedMarker
 
-    private val _currentLocation = MutableLiveData(LatLng(0.0, 0.0))
-    val currentLocation = _currentLocation
-
     private val _selectedLocation = MutableLiveData(LatLng(0.0, 0.0))
     val selectedLocation = _selectedLocation
 
@@ -87,9 +84,6 @@ class MapsViewModel: ViewModel() {
     private val _searchText = MutableLiveData("")
     val searchText = _searchText
 
-    private val _filteredMarkers = MutableLiveData(mutableListOf<MyMarker>())
-    val filteredMarkers = _filteredMarkers
-
     private val _filterColors = MutableLiveData(listOf<Float>())
     val filterColors = _filterColors
 
@@ -103,16 +97,6 @@ class MapsViewModel: ViewModel() {
 
     fun confirmMarkerReady(save: Boolean) {
         _markerReady.value = save
-    }
-
-    fun filterMarkers(){
-        _filteredMarkers.value = _listOfMarkers.value!!.filter {
-            it.title.contains(_searchText.value?: "", ignoreCase = true)
-        }.toMutableList()
-    }
-
-    fun showFilter(value: Boolean) {
-        _isFiltering.value = value
     }
 
     fun addFilterColor(color: Float) {
@@ -154,11 +138,6 @@ class MapsViewModel: ViewModel() {
         })
     }
 
-    /*
-      if (filtering) {
-        ColorRadioButtons(myViewModel, { myViewModel.changeFilterColor(it) }, HUE_RED)
-    }
-     */
     fun selectMarker(marker: MyMarker?) {
         _selectedMarker.value = marker
     }
@@ -296,8 +275,5 @@ class MapsViewModel: ViewModel() {
 
     fun modifyProcessing() {
         _isProcessing.value = !_isProcessing.value!!
-    }
-    fun setCurrentLocation(loc: LatLng) {
-        _currentLocation.value = loc
     }
 }

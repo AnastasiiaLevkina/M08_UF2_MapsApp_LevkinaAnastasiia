@@ -71,7 +71,6 @@ fun GeolocationScreen(navController: NavController, myViewModel: MapsViewModel) 
                 Log.e("Error", "Exception %s", task.exception)
             }
         }
-        myViewModel.setCurrentLocation(deviceLatLng)
         navController.navigate(Routes.MapScreen.route)
     }
     if (permissionDenied)

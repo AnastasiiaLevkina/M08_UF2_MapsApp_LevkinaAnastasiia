@@ -72,7 +72,7 @@ fun MyDrawer(myViewModel: MapsViewModel, mainNavController: NavController){
 
     ModalNavigationDrawer(
         drawerState = state,
-        gesturesEnabled = true,
+        gesturesEnabled = false,
         drawerContent = {
         ModalDrawerSheet {
             IconButton(onClick = {
@@ -155,11 +155,7 @@ fun MyDrawer(myViewModel: MapsViewModel, mainNavController: NavController){
                     }
                 }
                 // FILTER MARKERS BY COLOR
-                ColorCheckBoxes(myViewModel,
-                    {
-                        myViewModel.filterMarkers()
-                    }
-                )
+                ColorCheckBoxes(myViewModel)
                 }
             Divider()
             Text(text = loggedUser?: "Guest",
@@ -208,7 +204,7 @@ fun MyDrawer(myViewModel: MapsViewModel, mainNavController: NavController){
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ColorCheckBoxes(myViewModel: MapsViewModel, SelectColor: (Float) -> Unit){
+fun ColorCheckBoxes(myViewModel: MapsViewModel){
     val filterColors by myViewModel.filterColors.observeAsState(listOf())
     val markerColors: Array<Pair<Color, Float>> = arrayOf(
         Pair(Color.Red, BitmapDescriptorFactory.HUE_RED), Pair(Color.Blue,
@@ -218,7 +214,6 @@ fun ColorCheckBoxes(myViewModel: MapsViewModel, SelectColor: (Float) -> Unit){
             BitmapDescriptorFactory.HUE_CYAN
         ), Pair(Color.Magenta, BitmapDescriptorFactory.HUE_MAGENTA)
     )
-    //markerColors.forEach { if it.second) selectedOption = it }
     FlowRow (horizontalArrangement = Arrangement.Center){
         markerColors.forEach { color ->
             Column(

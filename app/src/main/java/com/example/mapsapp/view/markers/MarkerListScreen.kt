@@ -64,9 +64,9 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun MarkerListScreen(myViewModel: MapsViewModel, navController: NavController){
-    myViewModel.getSavedMarkers()
-    myViewModel.filterMarkers()
-    val myMarkers by myViewModel.filteredMarkers.observeAsState()
+    val myMarkers by myViewModel.listOfMarkers.observeAsState()
+
+    val searchText by myViewModel.searchText.observeAsState("")
     val showBottomSheet by myViewModel.bottomSheet.observeAsState(false)
     val selectedMarker by myViewModel.selectedMarker.observeAsState(null)
 
@@ -87,7 +87,9 @@ fun MarkerListScreen(myViewModel: MapsViewModel, navController: NavController){
             LazyColumn (
                 Modifier.fillMaxSize()
             ) {
-                items(myMarkers!!.reversed()) {
+                items(myMarkers!!.reversed().filter {
+                    it.title.contains(searchText?: "", ignoreCase = true)
+                }.toMutableList()) {
                     Box {
                         ElevatedCard(
                             elevation = CardDefaults.cardElevation(
@@ -151,7 +153,7 @@ fun MarkerListScreen(myViewModel: MapsViewModel, navController: NavController){
                                         myViewModel.deleteMarker(it)
                                         if (it.photo != null && it.photo != "null") myViewModel.removeImage(it.photo!!)
                                         myViewModel.selectMarker(null)
-                                        navController.navigate(Routes.MarkerListScreen.route)
+                                        myViewModel.getSavedMarkers()
                                     }) {
                                     Icon(
                                         imageVector = Icons.Default.Delete,
@@ -179,7 +181,6 @@ fun MySearchBar(myViewModel: MapsViewModel){
         query = searchText,
         onQueryChange ={
             myViewModel.onSearchTextChange(it)
-            myViewModel.filterMarkers()
                        },
         active = true,
         onActiveChange = {},
@@ -194,7 +195,7 @@ fun MySearchBar(myViewModel: MapsViewModel){
                 Color.Black
             )
         ),
-        onSearch =  { myViewModel.filterMarkers() },
+        onSearch =  { },
         placeholder = {
             Text(text = "Search for a marker...")
         },
@@ -203,7 +204,7 @@ fun MySearchBar(myViewModel: MapsViewModel){
                 tint = Color.Black,
                 modifier = Modifier.clickable {
                     myViewModel.onSearchTextChange("")
-                    myViewModel.filterMarkers()
+                    myViewModel.getSavedMarkers()
                 }
             )
         }

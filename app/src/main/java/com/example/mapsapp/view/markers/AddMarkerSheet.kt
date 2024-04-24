@@ -214,6 +214,7 @@ fun AddMarkerBottomSheet(myViewModel: MapsViewModel, navController: NavControlle
                 myViewModel.confirmMarkerReady(false)
 
                 myViewModel.hideBottomSheet()
+                myViewModel.getSavedMarkers()
                 navController.navigate(Routes.MarkerListScreen.route)
             }
         }
