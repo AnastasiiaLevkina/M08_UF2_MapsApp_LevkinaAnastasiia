@@ -63,6 +63,8 @@ fun MyDrawer(myViewModel: MapsViewModel, mainNavController: NavController){
     val state: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val loggedUser by myViewModel.loggedUser.observeAsState("")
 
+    val trafficEnabled by myViewModel.trafficEnabled.observeAsState(false)
+
     var mapTypeText by remember { mutableStateOf("TERRAIN") }
     val mapTypeList: List<String> = listOf("NORMAL", "SATELLITE", "TERRAIN", "HYBRID")
     var expanded by remember { mutableStateOf(false) }
@@ -127,10 +129,7 @@ fun MyDrawer(myViewModel: MapsViewModel, mainNavController: NavController){
                             )
                         },
                         modifier = Modifier.clickable { expanded = true },
-                        colors = TextFieldDefaults.colors(
-                            //focusedTextColor = Color.Black,
-                            //unfocusedTextColor = Color.Black,
-                        )
+                        colors = TextFieldDefaults.colors()
                     )
                     DropdownMenu(
                         expanded = expanded,
@@ -156,7 +155,17 @@ fun MyDrawer(myViewModel: MapsViewModel, mainNavController: NavController){
                 }
                 // FILTER MARKERS BY COLOR
                 ColorCheckBoxes(myViewModel)
-                }
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Text("Traffic", modifier = Modifier.padding(15.dp))
+                Checkbox(
+                    checked = trafficEnabled,
+                    onCheckedChange = { myViewModel.enableTraffic() }
+                )
+            }
             Divider()
             Text(text = loggedUser?: "Guest",
                 modifier = Modifier

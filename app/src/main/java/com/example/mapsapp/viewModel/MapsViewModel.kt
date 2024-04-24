@@ -20,6 +20,9 @@ class MapsViewModel: ViewModel() {
     private val repository: Repository = Repository()
     private val auth = FirebaseAuth.getInstance()
 
+    private val _trafficEnabled = MutableLiveData(false)
+    val trafficEnabled = _trafficEnabled
+
     private val _selectedMarker = MutableLiveData<MyMarker?>(null)
     val selectedMarker = _selectedMarker
 
@@ -89,6 +92,9 @@ class MapsViewModel: ViewModel() {
 
     private val _isFiltering = MutableLiveData(false)
     val isFiltering = _isFiltering
+    fun enableTraffic() {
+        _trafficEnabled.value = !_trafficEnabled.value!!
+    }
 
     // SEARCH MARKERS BY NAME
     fun onSearchTextChange(text: String){

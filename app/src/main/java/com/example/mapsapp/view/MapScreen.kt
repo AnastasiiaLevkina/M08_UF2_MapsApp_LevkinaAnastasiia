@@ -56,6 +56,7 @@ fun MapScreen(myViewModel: MapsViewModel, navController: NavController) {
     val currentLocation: LatLng by myViewModel.selectedLocation.observeAsState(LatLng(0.0, 0.0))
     val selectedMarker by myViewModel.selectedMarker.observeAsState(null)
     val mapType by myViewModel.selectedMapType.observeAsState(MapType.TERRAIN)
+    val trafficEnabled by myViewModel.trafficEnabled.observeAsState(false)
 
     val cameraPositionState =
         rememberCameraPositionState {
@@ -82,7 +83,10 @@ fun MapScreen(myViewModel: MapsViewModel, navController: NavController) {
                 cameraPositionState.position = CameraPosition.fromLatLngZoom(currentLocation, 15f)
                 myViewModel.showBottomSheet()
             },
-            properties = MapProperties(mapType = mapType, isMyLocationEnabled = true, isBuildingEnabled = true, isIndoorEnabled = true)
+            properties = MapProperties(
+                mapType = mapType,
+                isMyLocationEnabled = true,
+                isTrafficEnabled = trafficEnabled)
         ) {
             val myMarkers by myViewModel.listOfMarkers.observeAsState()
             myViewModel.getSavedMarkers()
