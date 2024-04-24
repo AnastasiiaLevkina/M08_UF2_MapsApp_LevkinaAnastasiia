@@ -66,12 +66,14 @@ fun MyDrawer(myViewModel: MapsViewModel, mainNavController: NavController){
     var mapTypeText by remember { mutableStateOf("TERRAIN") }
     val mapTypeList: List<String> = listOf("NORMAL", "SATELLITE", "TERRAIN", "HYBRID")
     var expanded by remember { mutableStateOf(false) }
-    val filteringMarkers by myViewModel.isFiltering.observeAsState(false)
 
     val context = LocalContext.current
     val userPrefs = UserPrefs(context)
 
-    ModalNavigationDrawer(drawerState = state, gesturesEnabled = false, drawerContent = {
+    ModalNavigationDrawer(
+        drawerState = state,
+        gesturesEnabled = true,
+        drawerContent = {
         ModalDrawerSheet {
             IconButton(onClick = {
                 scope.launch {
@@ -153,17 +155,6 @@ fun MyDrawer(myViewModel: MapsViewModel, mainNavController: NavController){
                     }
                 }
                 // FILTER MARKERS BY COLOR
-                /*IconButton(onClick = {myViewModel.filterMarkers()}) {
-                    Icon(Icons.Filled.FilterList, "Filter")
-                }*/
-                /*ColorRadioButtons(
-                    myViewModel,
-                    {
-                        myViewModel.changeFilterColor(it)
-                        myViewModel.filterMarkers()
-                    },
-                    color = null
-                )*/
                 ColorCheckBoxes(myViewModel,
                     {
                         myViewModel.filterMarkers()
@@ -240,6 +231,7 @@ fun ColorCheckBoxes(myViewModel: MapsViewModel, SelectColor: (Float) -> Unit){
                         if (!filterColors.contains(color.second))
                             myViewModel.addFilterColor(color.second)
                         else myViewModel.removeFilterColor(color.second)
+                        myViewModel.getSavedMarkers()
                     }
                 )
             }
