@@ -74,7 +74,7 @@ fun GalleryScreen(navController: NavController, myViewModel: MapsViewModel) {
                 }
                 uri = it
             } catch (_: NullPointerException) {
-                println("Caught a null pointer exception while closing the gallery.")
+                println("Caught NullPointerException while closing the gallery.")
             }
         }
     )

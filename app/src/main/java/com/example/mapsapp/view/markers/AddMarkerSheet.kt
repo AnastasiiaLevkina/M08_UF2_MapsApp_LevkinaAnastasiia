@@ -89,9 +89,9 @@ fun AddMarkerBottomSheet(myViewModel: MapsViewModel, navController: NavControlle
                     .padding(15.dp),
                 contentAlignment = Alignment.Center
             ) {
-                if (newMarkerPhoto.toString() != "null" || selectedMarker.photo.toString() != "null") {
+                if (newMarkerPhoto.toString() != "null") {
                     GlideImage(
-                        model = newMarkerPhoto?: selectedMarker.photo,
+                        model = newMarkerPhoto.toString(),
                         contentDescription = "Image from storage",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
@@ -123,7 +123,7 @@ fun AddMarkerBottomSheet(myViewModel: MapsViewModel, navController: NavControlle
                             newMarkerTitle,
                             newMarkerSnippet,
                             newMarkerColor,
-                            newMarkerPhoto?.toString()?: selectedMarker.photo.toString()
+                            newMarkerPhoto.toString()
                         )
                     ) },
                 placeholder = { Text(text = "Input marker title...") },
@@ -143,7 +143,7 @@ fun AddMarkerBottomSheet(myViewModel: MapsViewModel, navController: NavControlle
                             newMarkerTitle,
                             newMarkerSnippet,
                             newMarkerColor,
-                            newMarkerPhoto?.toString()?: selectedMarker.photo.toString()
+                            newMarkerPhoto.toString()
                         )
                     ) },
                 placeholder = { Text(text = "Input marker snippet...") },
@@ -185,7 +185,6 @@ fun AddMarkerBottomSheet(myViewModel: MapsViewModel, navController: NavControlle
             }
 
             if (markerReady) {
-                println("NEW MARKER PHOTO URL: " + imageUrl)
                 if (selectedMarker.markerId == null) { // Save a new marker
                     myViewModel.saveMarker(
                         MyMarker(
@@ -223,7 +222,7 @@ fun AddMarkerBottomSheet(myViewModel: MapsViewModel, navController: NavControlle
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun ColorRadioButtons(myViewModel: MapsViewModel, SelectColor: (Float) -> Unit, color: Float){
+fun ColorRadioButtons(myViewModel: MapsViewModel, SelectColor: (Float) -> Unit, color: Float?){
     val markerColors: Array<Pair<Color, Float>> = arrayOf(
         Pair(Color.Red, HUE_RED), Pair(Color.Blue, HUE_BLUE), Pair(Color.Green, HUE_GREEN),
         Pair(Color.Yellow, HUE_YELLOW), Pair(Color.Cyan, HUE_CYAN), Pair(Color.Magenta, HUE_MAGENTA)

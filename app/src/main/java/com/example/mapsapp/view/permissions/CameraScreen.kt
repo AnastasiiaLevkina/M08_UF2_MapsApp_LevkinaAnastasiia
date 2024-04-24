@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.example.mapsapp.models.MyMarker
 import com.example.mapsapp.models.Routes
@@ -91,8 +92,20 @@ fun CameraScreen(myViewModel: MapsViewModel, navController: NavController) {
             {
                 Text("Go to gallery")
             }
+
             Button(onClick =
             {
+                /*myViewModel.selectMarker(
+                    MyMarker(
+                        selectedMarker!!.userId,
+                        selectedMarker!!.markerId,
+                        selectedMarker!!.position,
+                        selectedMarker!!.title,
+                        selectedMarker!!.snippet,
+                        selectedMarker!!.color,
+                        null
+                    )
+                )*/
                 myViewModel.showBottomSheet()
             },
                 shape = RoundedCornerShape(20),

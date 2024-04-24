@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -55,6 +56,7 @@ import com.example.mapsapp.models.Routes
 import com.example.mapsapp.viewModel.MapsViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -67,6 +69,7 @@ fun MarkerListScreen(myViewModel: MapsViewModel, navController: NavController){
     val myMarkers by myViewModel.filteredMarkers.observeAsState()
     val showBottomSheet by myViewModel.bottomSheet.observeAsState(false)
     val selectedMarker by myViewModel.selectedMarker.observeAsState(null)
+
     if (showBottomSheet) {
         AddMarkerBottomSheet(
             myViewModel,

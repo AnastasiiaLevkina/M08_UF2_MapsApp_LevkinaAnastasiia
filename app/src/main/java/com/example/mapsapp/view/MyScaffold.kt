@@ -24,6 +24,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -113,6 +115,8 @@ fun MyScaffold(myViewModel: MapsViewModel, navController: NavController, state: 
 @Composable
 fun MyTopAppBar(myViewModel: MapsViewModel, state: DrawerState) {
     val scope = rememberCoroutineScope()
+    val filtering by myViewModel.isFiltering.observeAsState(false)
+    val filterColor by myViewModel.filterColors.observeAsState()
     TopAppBar(
         title = { Text("MapApp") },
         colors = TopAppBarDefaults.topAppBarColors(),

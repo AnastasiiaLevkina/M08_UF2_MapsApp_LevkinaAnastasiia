@@ -56,6 +56,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun MapScreen(myViewModel: MapsViewModel, navController: NavController) {
     val currentLocation: LatLng by myViewModel.selectedLocation.observeAsState(LatLng(0.0, 0.0))
     val selectedMarker by myViewModel.selectedMarker.observeAsState(null)
+    val mapType by myViewModel.selectedMapType.observeAsState(MapType.TERRAIN)
 
     val cameraPositionState =
         rememberCameraPositionState {
@@ -65,11 +66,6 @@ fun MapScreen(myViewModel: MapsViewModel, navController: NavController) {
         cameraPositionState.position = CameraPosition.fromLatLngZoom(currentLocation, 15f)
     }
     val showBottomSheet by myViewModel.bottomSheet.observeAsState(false)
-
-    val mapTypeList: List<String> = listOf("NORMAL", "SATELLITE", "TERRAIN", "HYBRID")
-    var mapTypeText by remember { mutableStateOf("TERRAIN") }
-    val mapType by myViewModel.selectedMapType.observeAsState(MapType.TERRAIN)
-    var expanded by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -89,14 +85,6 @@ fun MapScreen(myViewModel: MapsViewModel, navController: NavController) {
             },
             properties = MapProperties(mapType = mapType, isMyLocationEnabled = true, isBuildingEnabled = true, isIndoorEnabled = true)
         ) {
-            /*Marker(
-                state = MarkerState(position = currentLocation),
-                title = "I'm here",
-                snippet = "You put me here",
-                icon = bitmapDescriptorFromVector(context, R.drawable.locationicon, 100, 100),
-                onInfoWindowLongClick = {
-                }
-            )*/
             val myMarkers by myViewModel.listOfMarkers.observeAsState()
             myViewModel.getSavedMarkers()
             myMarkers!!.forEach {
@@ -110,65 +98,6 @@ fun MapScreen(myViewModel: MapsViewModel, navController: NavController) {
                             if (it.photo != null && it.photo != "null") myViewModel.removeImage(it.photo!!)
                     }
                 )
-            }
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                Modifier
-                    .padding(10.dp)
-                    .fillMaxWidth(0.5f)
-            ){
-                OutlinedTextField(
-                    value = mapTypeText,
-                    onValueChange = {},
-                    enabled = false,
-                    readOnly = true,
-                    label = {
-                        Text(text = "Map Type", color = Color.Black, fontSize = 15.sp)
-                    },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = expanded
-                        )
-                    },
-                    modifier = Modifier.clickable { expanded = true },
-                    colors = TextFieldDefaults.colors(
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                        unfocusedPlaceholderColor = Color.Black,
-                        unfocusedContainerColor = Color.White,
-                        focusedPlaceholderColor = Color.Black,
-                        focusedContainerColor = Color.White
-                    )
-                )
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    mapTypeList.forEach { option ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    text = option,
-                                    fontSize = 25.sp,
-                                    color = Color.Black
-                                )
-                            },
-                            onClick = {
-                                expanded = false
-                                myViewModel.changeMapType(mapTypeList.indexOf(option))
-                                mapTypeText = option
-                            }
-                        )
-                    }
-                }
             }
         }
     }

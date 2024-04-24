@@ -90,6 +90,12 @@ class MapsViewModel: ViewModel() {
     private val _filteredMarkers = MutableLiveData(mutableListOf<MyMarker>())
     val filteredMarkers = _filteredMarkers
 
+    private val _filterColors = MutableLiveData(listOf<Float>())
+    val filterColors = _filterColors
+
+    private val _isFiltering = MutableLiveData(false)
+    val isFiltering = _isFiltering
+
     // SEARCH MARKERS BY NAME
     fun onSearchTextChange(text: String){
         _searchText.value = text
@@ -105,6 +111,53 @@ class MapsViewModel: ViewModel() {
         }.toMutableList()
     }
 
+    fun showFilter(value: Boolean) {
+        _isFiltering.value = value
+    }
+
+    fun addFilterColor(color: Float) {
+        _filterColors.value = _filterColors.value!!.plus(color)
+    }
+    fun removeFilterColor(color: Float) {
+        _filterColors.value = _filterColors.value!!.minus(color)
+    }
+    fun filterMarkersByColor(){
+        repository.getMarkers()
+            .whereEqualTo("userId", userId.value)
+            .whereEqualTo("markerColor", filterColors.value).addSnapshotListener(object: EventListener<QuerySnapshot> {
+            override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
+                if(error != null){
+                    Log.e("Firestore error", error.message.toString())
+                    return //@addSnapshotListener
+                }
+                val tempList = mutableListOf<MyMarker>()
+                for(dc: DocumentChange in value?.documentChanges!!){
+                    if(dc.type == DocumentChange.Type.ADDED){
+                        val newMarker = MyMarker(
+                            dc.document.get("userId").toString(),
+                            dc.document.id,
+                            LatLng(dc.document.get("markerLatitude")!!.toString().toDouble(),
+                                dc.document.get("markerLongitude")!!.toString().toDouble()),
+                            dc.document.get("markerTitle")!!.toString(),
+                            dc.document.get("markerSnippet")!!.toString(),
+                            dc.document.get("markerColor")!!.toString().toFloat(),
+                            dc.document.get("markerPhoto")?.toString()
+                        )
+                        //.toObject(MyMarker::class.java) NO FUNCIONA
+                        tempList.add(newMarker)
+
+                    }
+                }
+                _listOfMarkers.value = tempList
+            }
+        })
+    }
+
+    /*
+      if (filtering) {
+        ColorRadioButtons(myViewModel, { myViewModel.changeFilterColor(it) }, HUE_RED)
+    }
+     */
     fun selectMarker(marker: MyMarker?) {
         _selectedMarker.value = marker
     }
